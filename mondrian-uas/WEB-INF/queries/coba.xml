@@ -1,0 +1,72 @@
+<Schema name="New Schema1">
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="product">
+    <Hierarchy name="Semua Produk" visible="true" hasAll="true" allMemberName="Semua Produk" primaryKey="product_id">
+      <Table name="product">
+      </Table>
+      <Level name="Kategori Produk" visible="true" column="product_category" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Nama Produk" visible="true" column="product_name" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="sales_territory">
+    <Hierarchy name="Semua Wilayah" visible="true" hasAll="true" allMemberName="Semua Wilayah" primaryKey="territory_id">
+      <Table name="sales_territory">
+      </Table>
+      <Level name="Nama Territory" visible="true" column="territory_id" nameColumn="territory_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="time">
+    <Hierarchy name="Semua Waktu" visible="true" hasAll="true" allMemberName="Semua Waktu" primaryKey="time_id">
+      <Table name="time">
+      </Table>
+      <Level name="Tahun" visible="true" column="tahun" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Bulan" visible="true" column="bulan" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="ship_method">
+    <Hierarchy name="Semua Pengiriman" visible="true" hasAll="true" allMemberName="Semua Pengiriman" primaryKey="shipmethod_id">
+      <Table name="ship_method" alias="">
+      </Table>
+      <Level name="Nama Pengiriman" visible="true" column="shipmethod_id" nameColumn="shipmethod_name" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="vendor">
+    <Hierarchy name="Semua Vendor" visible="true" hasAll="true" allMemberName="Semua Vendor">
+      <Table name="vendor" alias="">
+      </Table>
+      <Level name="Nama Vendor" visible="true" column="vendor_id" nameColumn="vendor_name" uniqueMembers="true" levelType="Regular">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Penjualan" visible="true" cache="true" enabled="true">
+    <Table name="fact_penjualan">
+    </Table>
+    <DimensionUsage source="product" name="product" visible="true" foreignKey="product_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="sales_territory" name="Sales Territory" visible="true" foreignKey="territory_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="time" name="Waktu" visible="true" foreignKey="time_id" highCardinality="false">
+    </DimensionUsage>
+    <Measure name="Total Penjualan" column="total_penjualan" datatype="Numeric" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="Pembelian" visible="true" cache="true" enabled="true">
+    <Table name="fact_pembelian" alias="">
+    </Table>
+    <DimensionUsage source="ship_method" name="Ship Method" visible="true" foreignKey="shipmethod_id">
+    </DimensionUsage>
+    <DimensionUsage source="vendor" name="Vendor" visible="true" foreignKey="vendor_id">
+    </DimensionUsage>
+    <DimensionUsage source="product" name="product" visible="true" foreignKey="product_id">
+    </DimensionUsage>
+    <DimensionUsage source="time" name="Waktu" visible="true" foreignKey="time_id">
+    </DimensionUsage>
+    <Measure name="Total Pembelian" column="total_pembelian" datatype="Numeric" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
